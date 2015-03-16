@@ -30,6 +30,7 @@ if (request.confirm) {
 def st = xwiki.parseGroovyFromPage("SupportToolsCode.Groovy")
 st.setXWiki(xwiki, xcontext, services)
 st.startJob()
+try {
 st.addXWikiFile("xwiki.cfg")
 st.addXWikiFile("xwiki.properties")
 st.addXWikiPage("Admin.CheckXWikiConfig")
@@ -44,11 +45,11 @@ st.addServerCommand("top", "top")
 st.addServerCommand("xinit", "/etc/init.d/xwiki.sh show-report")
 st.makeZip();
 
-try {
-  st.sendFile()
-  println "The report has been sent to XWiki SAS successfully.";
-} catch (Throwable e) {
-  println """The report could not be sent to XWiki SAS. You can download the report below and send it by email to "support@xwiki.com"."""
+if (st.sendFile())
+   println "The report has been sent to XWiki SAS successfully.";
+else  
+   println """The report could not be sent to XWiki SAS. You can download the report below and send it by email to "support@xwiki.com"."""
+  
 } finally {
   st.endJob();
 }
@@ -58,9 +59,16 @@ println """
 [[Download Report&gt;&gt;DownloadReport||queryString="id=${st.jobId}"]]
 
 """
+
+println """== Debug ==
+  
+${st.debugMsg}
+
+"""
 } else {
  println """[[Confirm sending report&gt;&gt;||queryString="confirm=1"]]"""
 }
+  
 {{/groovy}}
 </content>
 </xwikidoc>
