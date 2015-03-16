@@ -32,10 +32,16 @@ import org.apache.http.impl.client.*;
 import org.apache.http.entity.*;
 import org.apache.http.entity.mime.content.*;
 import org.apache.http.entity.mime.*;
+import org.apache.http.conn.ssl.*;
+import org.apache.http.conn.scheme.Scheme;
+import java.security.cert.*;
+import java.security.SecureRandom;
+import javax.net.ssl.*;
 
 public class SupportTools {
 
   def REPORTVERSION = "1.0"
+  def bypassSSLChecks = false;
   def defaultServerURL = "https://network.xwikisas.com/";
   def defaultClientName = "Unknown";
   def defaultClientPassword = "";
@@ -153,8 +159,37 @@ xwikiVersion: ${xwiki.getVersion()}
   }
 
   public sendFile() {
+try {
    def targetFile = new File(getStorageDirectory(), "report${jobId}.zip");
    def httpClient = HttpClientBuilder.create().build();
+
+// This code is used for testing only using servers without proper SSL certificates
+if (bypassSSLChecks) {
+   def sslContext = SSLContext.getInstance("SSL");
+   def tm = new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+
+                        return null;
+                    }
+
+                    public void checkClientTrusted(
+                            X509Certificate[] certs, String authType) {
+
+                    }
+
+                    public void checkServerTrusted(
+                            X509Certificate[] certs, String authType) {
+
+                    }
+                }
+   X509TrustManager[] tms = new X509TrustManager[1];
+   tms[0] = tm;
+   sslContext.init(null, tms, new SecureRandom());
+   def socketFactory = new SSLConnectionSocketFactory(sslContext,SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+   httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory).build();
+}
+
+
    def post = new HttpPost(serverURL + "/xwiki/bin/view/Reports/NewReport");
    def fileBody = new FileBody(targetFile, ContentType.DEFAULT_BINARY);  
    def wikiURL = xwiki.getDocument("Main.WebHome").getExternalURL();
@@ -169,11 +204,25 @@ xwikiVersion: ${xwiki.getVersion()}
    builder.addPart("wiki", new StringBody(wikiURL));
    builder.addPart("xwikiVersion", new StringBody(xwiki.getVersion()));
    builder.addPart("reportVersion", new StringBody(REPORTVERSION));
+   builder.addPart("xpage", new StringBody("plain"));
+   builder.addPart("outputSyntax", new StringBody("plain"));
    def entity = builder.build();
    //
    post.setEntity(entity);
+   def handler = new BasicResponseHandler();
    def response = httpClient.execute(post);
-   return;
+   debug("Response code: " + response.getStatusLine().getStatusCode());
+   String result = handler.handleResponse(response);
+   debug("Response: " + result);
+   if (result.startsWith("SUCCESS"))
+    return true;
+   else 
+    return false;
+} catch (Throwable e) {
+   debug("Exception: " + e.getMessage());
+   e.printStackTrace();
+   return false;
+}
   }
 
   public downloadReport(id) {
