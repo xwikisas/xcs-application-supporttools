@@ -182,5 +182,5 @@
       <users>XWiki.XWikiGuest</users>
     </property>
   </object>
-  <content>{{include document="ReportsCode.NewReport" /}}</content>
+  <content>{{include document="ReportsCode.NewReportService" /}}</content>
 </xwikidoc>
