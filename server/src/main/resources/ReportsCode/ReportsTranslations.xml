@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>ReportsCode</web>
+  <name>ReportsTranslations</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>ReportsClass</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1420066800000</creationDate>
+  <date>1420066800000</date>
+  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <object>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <name>ReportsCode.ReportsTranslations</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>7c64e002-0ae6-423d-9ea0-9966c78be783</guid>
+    <property>
+      <scope>ON_DEMAND</scope>
+    </property>
+  </object>
+  <content># Class fields
+ReportsCode.ReportsClass_name=Title
+ReportsCode.ReportsClass_client=Client
+ReportsCode.ReportsClass_reportDate=Date of The Report
+ReportsCode.ReportsClass_ip=IP
+ReportsCode.ReportsClass_wiki=Wiki
+ReportsCode.ReportsClass_xwikiVersion=XWiki Version
+ReportsCode.ReportsClass_reportVersion=RepORT Version
+
+# Live table generic keys
+reports.livetable.doc.title=Page title
+reports.livetable.doc.name=Page name
+reports.livetable.doc.space=Space
+reports.livetable.doc.fullname=Page full name
+reports.livetable.doc.author=Last Author
+reports.livetable.doc.creator=Creator
+reports.livetable.doc.date=Update date
+reports.livetable.doc.creationDate=Creation date
+reports.livetable._avatar=Avatar
+reports.livetable._images=Images
+reports.livetable._attachments=Attachments
+reports.livetable._actions=Actions
+reports.livetable._actions.edit=Edit
+reports.livetable._actions.delete=Delete
+reports.livetable.emptyvalue=-
+
+# Live table specific keys
+reports.livetable.name=Title
+reports.livetable.client=Client
+reports.livetable.reportDate=Date of The Report
+reports.livetable.ip=IP
+reports.livetable.wiki=Wiki
+reports.livetable.xwikiVersion=XWiki Version
+reports.livetable.reportVersion=RepORT Version</content>
+</xwikidoc>
