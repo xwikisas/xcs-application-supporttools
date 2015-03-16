@@ -85,7 +85,7 @@
       <clientPassword/>
     </property>
     <property>
-      <server>http://localhost:7080</server>
+      <server>https://network.xwikisas.com</server>
     </property>
   </object>
   <object>

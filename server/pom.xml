@@ -22,51 +22,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.xwiki.commons</groupId>
-    <artifactId>xwiki-commons-pom</artifactId>
-    <version>5.4.4</version>
+    <groupId>com.xwikisas</groupId>
+    <artifactId>xcs-application-supporttools</artifactId>
+    <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>org.xwiki.contrib</groupId>
-  <artifactId>application-xwiki-sas-support-tools---server</artifactId>
-  <version>1.0</version>
+  <groupId>com.xwikisas</groupId>
+  <artifactId>xcs-application-supporttools-server</artifactId>
+  <version>1.0-SNAPSHOT</version>
   <packaging>xar</packaging>
   <name>XWiki Application - XWiki SAS Support Tools - Server</name>
   <description>Support Tools for XWiki SAS - Server Application</description>
-  <developers>
-    <developer>
-      <id>ldubost</id>
-      <name>ldubost</name>
-    </developer>
-  </developers>
- <build>
-    <!-- Needed to add support for the XAR packaging -->
-    <extensions>
-      <extension>
-        <groupId>org.xwiki.commons</groupId>
-        <artifactId>xwiki-commons-tool-xar-handlers</artifactId>
-        <version>${commons.version}</version>
-      </extension>
-    </extensions>
-    <plugins>
-      <!-- The XAR packaging uses the XAR plugin and thus we need to define what version to use -->
-      <plugin>
-        <groupId>org.xwiki.commons</groupId>
-        <artifactId>xwiki-commons-tool-xar-plugin</artifactId>
-        <version>${commons.version}</version>
-      </plugin>
-    </plugins>
-  </build>
-  <scm>
-    <connection>scm:git:git://github.com/xwikisas/xcs-application-supporttools.git</connection>
-    <developerConnection>scm:git:git@github.com:xwikisas/xcs-application-supporttools.git</developerConnection>
-    <url>https://github.com/xwikisas/xcs-application-supporttools</url>
-    <tag>HEAD</tag>
-  </scm>
-  <distributionManagement>
-    <repository>
-      <id>xwiki-staging</id>
-      <name>XWiki Staging Repository</name>
-      <url>http://nexus.xwiki.org/nexus/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
 </project>

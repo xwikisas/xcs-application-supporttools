@@ -1,0 +1,76 @@
+<!--
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ *
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.xwiki.commons</groupId>
+    <artifactId>xwiki-commons-pom</artifactId>
+    <version>5.4.4</version>
+  </parent>
+  <groupId>com.xwikisas</groupId>
+  <artifactId>xcs-application-supporttools</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>XWiki Application - XWiki SAS Support Tools</name>
+  <description>Support Tools for XWiki SAS</description>
+  <developers>
+    <developer>
+      <id>ldubost</id>
+      <name>Ludovic Dubost, XWiki SAS</name>
+    </developer>
+  </developers>
+ <build>
+    <!-- Needed to add support for the XAR packaging -->
+    <extensions>
+      <extension>
+        <groupId>org.xwiki.commons</groupId>
+        <artifactId>xwiki-commons-tool-xar-handlers</artifactId>
+        <version>${commons.version}</version>
+      </extension>
+    </extensions>
+    <plugins>
+      <!-- The XAR packaging uses the XAR plugin and thus we need to define what version to use -->
+      <plugin>
+        <groupId>org.xwiki.commons</groupId>
+        <artifactId>xwiki-commons-tool-xar-plugin</artifactId>
+        <version>${commons.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+  <scm>
+    <connection>scm:git:git://github.com/xwikisas/xcs-application-supporttools.git</connection>
+    <developerConnection>scm:git:git@github.com:xwikisas/xcs-application-supporttools.git</developerConnection>
+    <url>https://github.com/xwikisas/xcs-application-supporttools</url>
+    <tag>HEAD</tag>
+  </scm>
+  <distributionManagement>
+    <repository>
+      <id>xwiki-staging</id>
+      <name>XWiki Staging Repository</name>
+      <url>http://nexus.xwiki.org/nexus/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+  <modules>
+    <module>client</module>
+    <module>server</module>
+  </modules>
+</project>
