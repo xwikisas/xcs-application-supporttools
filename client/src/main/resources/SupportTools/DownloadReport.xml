@@ -4,9 +4,9 @@
   <web>SupportTools</web>
   <name>DownloadReport</name>
   <language/>
-  <defaultLanguage>en</defaultLanguage>
+  <defaultLanguage/>
   <translation>0</translation>
-  <parent/>
+  <parent>WebHome</parent>
   <creator>xwiki:XWiki.Admin</creator>
   <author>xwiki:XWiki.Admin</author>
   <customClass/>
@@ -15,7 +15,7 @@
   <date>1420066800000</date>
   <contentUpdateDate>1420066800000</contentUpdateDate>
   <version>1.1</version>
-  <title/>
+  <title>Download Report</title>
   <defaultTemplate/>
   <validationScript/>
   <comment/>

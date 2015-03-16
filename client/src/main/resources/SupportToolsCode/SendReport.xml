@@ -4,9 +4,9 @@
   <web>SupportToolsCode</web>
   <name>SendReport</name>
   <language/>
-  <defaultLanguage>en</defaultLanguage>
+  <defaultLanguage/>
   <translation>0</translation>
-  <parent/>
+  <parent>WebHome</parent>
   <creator>xwiki:XWiki.Admin</creator>
   <author>xwiki:XWiki.Admin</author>
   <customClass/>
@@ -21,7 +21,7 @@
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
-  <hidden>false</hidden>
+  <hidden>true</hidden>
   <content>
 This tools allows to send a report about your installation to XWiki SAS' support team. All information will be kept strictly confidential.
 

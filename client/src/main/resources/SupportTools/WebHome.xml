@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
-  <web>SupportToolsCode</web>
-  <name>DownloadReport</name>
+  <web>SupportTools</web>
+  <name>WebHome</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
-  <parent>WebHome</parent>
+  <parent>Main.WebHome</parent>
   <creator>xwiki:XWiki.Admin</creator>
   <author>xwiki:XWiki.Admin</author>
   <customClass/>
@@ -15,23 +15,13 @@
   <date>1420066800000</date>
   <contentUpdateDate>1420066800000</contentUpdateDate>
   <version>1.1</version>
-  <title>Download Report</title>
+  <title>XWiki SAS Support Tools</title>
   <defaultTemplate/>
   <validationScript/>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
-  <hidden>true</hidden>
-  <content>{{groovy}}
- def st = xwiki.parseGroovyFromPage("SupportToolsCode.Groovy")
- st.setXWiki(xwiki, xcontext, services)
- def jobId = request.id;
- if (jobId &amp;&amp; jobId!="") {
-  println("Downloading report");
-  st.downloadReport(jobId)
- } else {
-  println("No jobId has been indicated. Here are the following reports available: ");
-  println st.listReports();
- }
-{{/groovy}}</content>
+  <hidden>false</hidden>
+  <content>
+* [[Send Report&gt;&gt;SendReport]]</content>
 </xwikidoc>
