@@ -41,7 +41,7 @@ import javax.net.ssl.*;
 public class SupportTools {
 
   def REPORTVERSION = "1.0"
-  def bypassSSLChecks = false;
+  def bypassSSLChecks = true;
   def defaultServerURL = "https://network.xwikisas.com/";
   def defaultClientName = "Unknown";
   def defaultClientPassword = "";
@@ -267,7 +267,7 @@ if (bypassSSLChecks) {
      def str = ""
      try {
      def proc = command.execute()               
-     proc.waitFor()
+     proc.waitForOrKill(10000)
      
      str += "${ proc.exitValue()}\n"
      str += "stderr:\n ${proc.err.text}\n"
