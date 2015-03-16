@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>SupportToolsCode</web>
+  <name>SendReport</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <parent/>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1420066800000</creationDate>
+  <date>1420066800000</date>
+  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <version>1.1</version>
+  <title>XWiki SAS Support Tool - Send Report</title>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>
+This tools allows to send a report about your installation to XWiki SAS' support team. All information will be kept strictly confidential.
+
+{{groovy}}  
+if (request.confirm) {
+def st = xwiki.parseGroovyFromPage("SupportToolsCode.Groovy")
+st.setXWiki(xwiki, xcontext, services)
+st.startJob()
+st.addXWikiFile("xwiki.cfg")
+st.addXWikiFile("xwiki.properties")
+st.addXWikiPage("Admin.CheckXWikiConfig")
+st.addXWikiPage("Admin.CheckProgrammingRights")
+st.addXWikiPage("Admin.CheckProgrammingRights")
+st.addXWikiPage("Admin.ShowRights")
+st.addXWikiPage("Admin.UsedSpace")
+st.addXWikiPage("Admin.CheckDBEncoding")
+st.addXWikiPage("Admin.CheckIndexes")
+st.addWEBINFListing()
+st.addServerCommand("top", "top")
+st.addServerCommand("xinit", "/etc/init.d/xwiki.sh show-report")
+st.makeZip();
+
+try {
+  st.sendFile()
+  println "The report has been sent to XWiki SAS successfully.";
+} catch (Throwable e) {
+  println """The report could not be sent to XWiki SAS. You can download the report below and send it by email to "support@xwiki.com"."""
+} finally {
+  st.endJob();
+}
+
+println """
+
+[[Download Report&gt;&gt;DownloadReport||queryString="id=${st.jobId}"]]
+
+"""
+} else {
+ println """[[Confirm sending report&gt;&gt;||queryString="confirm=1"]]"""
+}
+{{/groovy}}
+</content>
+</xwikidoc>
