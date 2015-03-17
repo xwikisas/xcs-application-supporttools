@@ -4,7 +4,7 @@
   <web>SupportToolsCode</web>
   <name>Translations</name>
   <language>fr</language>
-  <defaultLanguage>en</defaultLanguage>
+  <defaultLanguage/>
   <translation>1</translation>
   <parent>WebHome</parent>
   <creator>xwiki:XWiki.Admin</creator>
@@ -57,6 +57,7 @@ supporttools.issue.creationDate=Date de création
 supporttools.issue.updateDate=Date de mise-à-jour
 supporttools.issues.list=Liste des tickets
 supporttools.issues.fail=Un problème est survenu lors de la répurations des tickets. Verifiez [[votre configuration&gt;&gt;url:{0}]] ou contactez le Support XWiki.
+supporttools.issues.noissues=Aucun ticket
 
 supporttools.sendreport.button=Envoyer le rapport de configuration
 supporttools.sendreport.title=Envoyer le rapport de Configuration
