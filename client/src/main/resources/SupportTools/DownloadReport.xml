@@ -15,7 +15,7 @@
   <date>1420066800000</date>
   <contentUpdateDate>1420066800000</contentUpdateDate>
   <version>1.1</version>
-  <title>Download Report</title>
+  <title>$services.localization.render("supporttools.downloadreport.title")</title>
   <defaultTemplate/>
   <validationScript/>
   <comment/>

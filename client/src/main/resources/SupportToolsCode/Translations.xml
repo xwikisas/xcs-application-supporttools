@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>SupportToolsCode</web>
+  <name>Translations</name>
+  <language/>
+  <defaultLanguage>en</defaultLanguage>
+  <translation>0</translation>
+  <parent>WebHome</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1420066800000</creationDate>
+  <date>1420066800000</date>
+  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <object>
+    <class>
+      <name>XWiki.TranslationDocumentClass</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <scope>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>scope</name>
+        <number>1</number>
+        <prettyName>Scope</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators>|, </separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>GLOBAL|WIKI|USER|ON_DEMAND</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </scope>
+    </class>
+    <name>SupportToolsCode.Translations</name>
+    <number>0</number>
+    <className>XWiki.TranslationDocumentClass</className>
+    <guid>c675af56-c19c-4e70-8b18-e9afdb1d0097</guid>
+    <property>
+      <scope>WIKI</scope>
+    </property>
+  </object>
+  <content>
+supporttools.debug=Debug Information
+supporttools.debuginfo=This debug information can be usefull to help XWiki Support understand the problem.
+
+supporttools.newissue.button=Create New Issue
+supporttools.newissue.type=Type
+supporttools.newissue.summary=Summary
+supporttools.newissue.description=Description
+supporttools.newissue.priority=Priority
+supporttools.issue.type.1=Bug
+supporttools.issue.type.3=Question
+supporttools.issue.type.6=Idea
+supporttools.issue.type.7=Test
+supporttools.issue.priority.4=Minor
+supporttools.issue.priority.3=Major
+supporttools.issue.priority.2=Critical
+
+supporttools.newissue.title=New Issue
+supporttools.newissue.attachments=Attachments
+supporttools.newissue.addAnotherAttachment=Add another attachment
+supporttools.newissue.create=Create Issue
+supporttools.newissue.success=The issue [[{0}&gt;&gt;{1}]] has been created successfully.
+supporttools.newissue.fail=The issue could not be created. Please contact XWiki Support.
+supporttools.newissue.configreport=Configuration report
+supporttools.newissue.attachreport=Attach configuration report (only attach if not sent recently)
+
+supporttools.issue.id=Id
+supporttools.issue.status=Status
+supporttools.issue.summary=Summary
+supporttools.issue.description=Description
+supporttools.issue.type=Type
+supporttools.issue.creationDate=Creation Date
+supporttools.issue.updateDate=Update Date
+supporttools.issues.list=Issues List
+supporttools.issues.fail=An error occured while trying to retrieve the issue list. Please check [[your configuration settings&gt;&gt;url:{0}]] or contact XWiki Support.
+
+supporttools.sendreport.button=Send Configuration Report
+supporttools.sendreport.title=Send Configuration Report
+supporttools.sendreport.confirm=Confirm sending configuration report
+supporttools.sendreport.info=This tools allows to send a report about your installation to XWiki SAS' support team. All information will be kept strictly confidential.
+supporttools.sendreport.success=The report has been sent to XWiki SAS successfully.
+supporttools.sendreport.fail=The report could not be sent to XWiki SAS. You can download the report below and send it by email to "support@xwiki.com".
+supporttools.sendreport.download=Download report
+
+
+supporttools.downloadreport.nojob=No report Id has been indicated. Here are the following reports available:
+supporttools.downloadreport.downloading=Downloading report
+supporttools.downloadreport.reportfrom=Report from date {0}
+supporttools.downloadreport.title=Download Reports</content>
+</xwikidoc>

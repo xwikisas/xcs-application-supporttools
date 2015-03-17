@@ -34,9 +34,14 @@ import org.apache.http.entity.mime.content.*;
 import org.apache.http.entity.mime.*;
 import org.apache.http.conn.ssl.*;
 import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.auth.*;
 import java.security.cert.*;
 import java.security.SecureRandom;
+import org.apache.commons.codec.binary.Base64;
 import javax.net.ssl.*;
+import groovy.json.*;
+
 
 public class SupportTools {
 
@@ -44,10 +49,12 @@ public class SupportTools {
   def bypassSSLChecks = true;
   def defaultServerURL = "https://network.xwikisas.com/";
   def defaultClientName = "Unknown";
+  def defaultClientUsername = "Unknown";
   def defaultClientPassword = "";
   
   def serverURL = defaultServerURL;
   def clientName = defaultClientName;
+  def clientUsername = defaultClientUsername;
   def clientPassword = defaultClientPassword;
   def xwiki;
   def xcontext;
@@ -74,13 +81,59 @@ public class SupportTools {
     serverURL = configDoc.getValue("server");
     clientName = configDoc.getValue("clientName");
     clientPassword = configDoc.getValue("clientPassword");
+    clientUsername = configDoc.getValue("clientUsername");
     if (serverURL == null || serverURL=="")
      serverURL = defaultServerURL;
     if (clientName == null || clientName == "")
      clientName = defaultClientName;
+    if (clientUsername == null || clientUsername == "")
+     clientUsername = defaultclientUsername;
     if (clientPassword==null) 
      clientPassword = "";
   }
+
+  public getHttpClient() {
+    def httpClient = HttpClientBuilder.create().build();
+
+    // This code is used for testing only using servers without proper SSL certificates
+    if (bypassSSLChecks) {
+     def sslContext = SSLContext.getInstance("SSL");
+     def tm = new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+
+                        return null;
+                    }
+
+                    public void checkClientTrusted(
+                            X509Certificate[] certs, String authType) {
+
+                    }
+
+                    public void checkServerTrusted(
+                            X509Certificate[] certs, String authType) {
+
+                    }
+                }
+   X509TrustManager[] tms = new X509TrustManager[1];
+   tms[0] = tm;
+   sslContext.init(null, tms, new SecureRandom());
+   def socketFactory = new SSLConnectionSocketFactory(sslContext,SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+   httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory).build();
+   }
+
+   return httpClient;
+  }
+
+  def getAuthHttpContext() {
+   // authentication
+   def creds = new UsernamePasswordCredentials(clientUsername, clientPassword);
+   def credsProvider = new BasicCredentialsProvider()
+   credsProvider.setCredentials(AuthScope.ANY, , creds);
+   def httpContext = HttpClientContext.create();
+   httpContext.setCredentialsProvider(credsProvider);
+   return httpContext;
+  }
+
 
   public long startJob() {
     if (jobStarted)
@@ -161,34 +214,7 @@ xwikiVersion: ${xwiki.getVersion()}
   public sendFile() {
 try {
    def targetFile = new File(getStorageDirectory(), "report${jobId}.zip");
-   def httpClient = HttpClientBuilder.create().build();
-
-// This code is used for testing only using servers without proper SSL certificates
-if (bypassSSLChecks) {
-   def sslContext = SSLContext.getInstance("SSL");
-   def tm = new X509TrustManager() {
-                    public X509Certificate[] getAcceptedIssuers() {
-
-                        return null;
-                    }
-
-                    public void checkClientTrusted(
-                            X509Certificate[] certs, String authType) {
-
-                    }
-
-                    public void checkServerTrusted(
-                            X509Certificate[] certs, String authType) {
-
-                    }
-                }
-   X509TrustManager[] tms = new X509TrustManager[1];
-   tms[0] = tm;
-   sslContext.init(null, tms, new SecureRandom());
-   def socketFactory = new SSLConnectionSocketFactory(sslContext,SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-   httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory).build();
-}
-
+   def httpClient = getHttpClient()
 
    def post = new HttpPost(serverURL + "/xwiki/bin/view/Reports/NewReport");
    def fileBody = new FileBody(targetFile, ContentType.DEFAULT_BINARY);  
@@ -225,6 +251,39 @@ if (bypassSSLChecks) {
 }
   }
 
+public boolean sendReport() {
+try {
+ startJob()
+ addXWikiFile("xwiki.cfg")
+ addXWikiFile("xwiki.properties")
+ addXWikiFile("hibernate.cfg.xml")
+ addXWikiFile("web.xml")
+ addXWikiPage("Admin.CheckXWikiConfig")
+ addXWikiPage("Admin.CheckProgrammingRights")
+ addXWikiPage("Admin.ShowRights")
+ addXWikiPage("Admin.UsedSpace")
+ addXWikiPage("Admin.CheckDBEncoding")
+ addXWikiPage("Admin.CheckIndexes")
+ addWEBINFListing()
+ addServerCommand("xwiki-workdir", "ls -lR /usr/local/xwiki-workdir/")
+ addServerCommand("tomcat-server.xml", "cat /usr/local/tomcat/conf/server.xml")
+ addServerCommand("tomcat-web.xml", "cat /usr/local/tomcat/conf/web.xml")
+ addServerCommand("tomcat-context.xml", "cat /usr/local/tomcat/conf/context.xml")
+ addServerCommand("top", "top -b -n 3 -d0.5")
+ addServerCommand("df", "df -h")
+ addServerCommand("javaThreads", "ps -L -C java")
+ addServerCommand("log-catalina", "tail -10000 /usr/local/tomcat/logs/catalina.out")
+ // the following commands not work because of process rights on the server
+ addServerCommand("xinit", "/etc/init.d/xwiki.sh show-report")
+ addServerCommand("apache2", "cat /etc/apache2/*.conf")
+ addServerCommand("apache2sites", "cat /etc/apache2/sites-enabled/*")
+ makeZip();
+ return sendFile();
+} finally {
+ endJob();
+}
+}
+
   public downloadReport(id) {
    def targetFile = getReportFile(id)
    xcontext.response.setContentType("application/octet-stream");
@@ -240,7 +299,8 @@ if (bypassSSLChecks) {
    for (file in repDir.listFiles()) {
     try {
      def date = new Date(Long.parseLong(file.name))
-     str += """* [[Download report from ${date}&gt;&gt;||queryString="id=${file.name}"]]\n""";
+     def text = services.localization.render("supporttools.downloadreport.reportfrom", [date])
+     str += """* [[${text}&gt;&gt;||queryString="id=${file.name}"]]\n""";
     } catch (e) {
     }
    }
@@ -287,5 +347,80 @@ if (bypassSSLChecks) {
     def command = "ls -lR ${path}/WEB-INF"
     addServerCommand("webinflisting", command);
   }
+
+  public getTickets() {
+   try {
+    def url = "${serverURL}/xwiki/bin/view/SupportCode/IssueListSheetJson?xpage=plain&amp;outputSyntax=plain&amp;status=all&amp;basicauth=1"
+    def json = xwiki.getURLContent(url, clientUsername, clientPassword)
+    def jsonSlurper = new JsonSlurper()
+    return jsonSlurper.parseText(json)
+   } catch(e) {
+    e.printStackTrace();
+debug("Exception: " + e.getMessage())
+    return null;
+   }
+}
+
+
+  public sendTicket(request) {
+// send an additional configuration report
+try {
+if (request.ticket_attachreport=="1") {
+if (sendReport()) {
+   debug("Attached report");
+} else {
+   debug("Failed to send report");
+}
+}
+} catch (e) {
+   e.printStackTrace();
+   debug("Failed to send report with exception " + e.getMessage());
+}
+
+try {
+   def httpClient = getHttpClient()
+
+   def post = new HttpPost("${serverURL}/xwiki/bin/view/SupportCode/NewTicketFormJson?basicauth=1");
+   
+   def builder = MultipartEntityBuilder.create();
+   builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+   for (field in ["subject", "type", "priority", "description"]) {
+     def content = request.getParameter("ticket_${field}");
+     if (field=="description" &amp;&amp; request.ticket_attachreport=="1")
+      content += "\n\nAttached report: ${serverURL}/xwiki/bin/view/Reports/${clientName}${jobId}\n"
+     builder.addPart("ticket_${field}", new StringBody(content));
+   }
+   builder.addPart("xpage", new StringBody("plain"));
+   builder.addPart("outputSyntax", new StringBody("plain"));
+   builder.addPart("basicauth", new StringBody("1"));
+
+   def fu = xwiki.getPlugin("fileupload");
+   for (fileItem in fu.getFileItems()) {
+    if (fileItem.getName()!=null) {
+     def isBody = new ByteArrayBody(fileItem.get(), ContentType.DEFAULT_BINARY, fileItem.getName())
+     builder.addPart(fileItem.getFieldName(), isBody);
+     debug("Added file name:" + fileItem.getName() + " field:" + fileItem.getFieldName());
+    }
+   }
+
+   def entity = builder.build();
+   //
+   post.setEntity(entity);
+   def handler = new BasicResponseHandler();
+   def response = httpClient.execute(post, getAuthHttpContext());
+   debug("Response code: " + response.getStatusLine().getStatusCode());
+   String result = handler.handleResponse(response);
+   debug("Response: " + result);
+   def jsonSlurper = new JsonSlurper()
+   def resultObj = jsonSlurper.parseText(result) 
+   debug("Response: " + resultObj);
+   return resultObj;
+} catch (Throwable e) {
+   debug("Exception: " + e.getMessage());
+   e.printStackTrace();
+   return null;
+}
+  }
+
 }</content>
 </xwikidoc>

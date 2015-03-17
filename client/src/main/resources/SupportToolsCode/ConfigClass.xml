@@ -49,7 +49,7 @@
       <customDisplay/>
       <disabled>0</disabled>
       <name>clientPassword</name>
-      <number>3</number>
+      <number>4</number>
       <picker>0</picker>
       <prettyName>clientPassword</prettyName>
       <size>30</size>
@@ -59,6 +59,19 @@
       <validationRegExp/>
       <classType>com.xpn.xwiki.objects.classes.PasswordClass</classType>
     </clientPassword>
+    <clientUsername>
+      <customDisplay/>
+      <disabled>0</disabled>
+      <name>clientUsername</name>
+      <number>3</number>
+      <picker>0</picker>
+      <prettyName>clientUsername</prettyName>
+      <size>30</size>
+      <unmodifiable>0</unmodifiable>
+      <validationMessage/>
+      <validationRegExp/>
+      <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+    </clientUsername>
     <server>
       <customDisplay/>
       <disabled>0</disabled>

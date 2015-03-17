@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>SupportToolsCode</web>
+  <name>IssuesSheet</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>SupportTools.WebHome</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1420066800000</creationDate>
+  <date>1420066800000</date>
+  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <version>1.1</version>
+  <title>$services.localization.render("supporttools.issues.list")</title>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}
+
+ {{html clean=false}}
+ &lt;a href="$xwiki.getURL("SupportTools.NewIssue")" class="button"&gt;$services.localization.render("supporttools.newissue.button")&lt;/a&gt;
+ &lt;a href="$xwiki.getURL("SupportTools.SendReport")" class="button"&gt;$services.localization.render("supporttools.sendreport.button")&lt;/a&gt;
+ {{/html}}
+
+
+ #set($st = $xwiki.parseGroovyFromPage("SupportToolsCode.Groovy"))
+ #set($ok = $st.setXWiki($xwiki, $context, $services))
+ #set($issues = $st.getTickets())
+ #if($issues==$util.null)
+ #set($configURL = $xwiki.getDocument("XWiki.XWikiPreferences").getExternalURL("admin", "editor=globaladmin&amp;section=XWiki+Network"))
+ $services.localization.render("supporttools.issues.fail", [ $configURL ])
+ == $services.localization.render("supporttools.debug") ==
+
+$services.localization.render("supporttools.debuginfo")
+
+$st.debugMsg
+ #elseif($issues.issues.size()==0)
+ $services.localization.render("supporttools.issues.noissues")
+ #else
+ |= $services.localization.render("supporttools.issue.id")|= $services.localization.render("supporttools.issue.summary") |= $services.localization.render("supporttools.issue.type") |= $services.localization.render("supporttools.issue.status") |= $services.localization.render("supporttools.issue.creationDate") |= $services.localization.render("supporttools.issue.updateDate")
+ #foreach($issue in $issues.issues)
+ | [[${issue.key}&gt;&gt;${issue.url}]] | $issue.summary | ${issue.statusPretty} | ${issue.typePretty} | ${issue.createdPretty} | ${issue.updatedPretty} 
+ #end
+ #end
+{{/velocity}}</content>
+</xwikidoc>
