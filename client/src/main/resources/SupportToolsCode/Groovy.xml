@@ -264,6 +264,7 @@ try {
  addXWikiPage("Admin.UsedSpace")
  addXWikiPage("Admin.CheckDBEncoding")
  addXWikiPage("Admin.CheckIndexes")
+ addXWikiPage("SupportToolsCode.ActivityReport")
  addWEBINFListing()
  addServerCommand("xwiki-workdir", "ls -lR /usr/local/xwiki-workdir/")
  addServerCommand("tomcat-server.xml", "cat /usr/local/tomcat/conf/server.xml")

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>SupportToolsCode</web>
+  <name>ActivityReport</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>WebHome</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1420066800000</creationDate>
+  <date>1420066800000</date>
+  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <version>1.1</version>
+  <title/>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{groovy}}
+  def showResults(cols, hql) {
+    showResults(cols, hql, null); 
+  }
+  
+  def showResults(cols, hql, wiki) {
+    try {
+     def query = services.query.hql(hql);
+     if (wiki!=null)
+       query = query.setWiki(wiki);
+     def list = query.execute();
+    for (col in cols.split(",")) {
+      print "|= ${col.trim()}"
+    }
+    println ""
+    for (row in list) {
+      for (item in row) {
+        print "|{{{${item}}}}"
+      }
+      println ""
+    }
+  } catch (e) {
+    println("Error running query ${hql}")
+  }
+  } 
+  
+  def getWikiList() {
+    
+  def list = new ArrayList();
+    if (services.wiki!=null) {
+      try {
+        for (wiki in services.wiki.getAll()) {
+          list.add(wiki.id)
+        }
+      } catch(e) { 
+      }
+    } else if (services.wikimanager!=null) {
+      try {
+        for (wiki in services.wikimanager.getAllWikis()) {
+          list.add(wiki.name)  
+        }
+      } catch(e) {
+      }
+    }
+    return list;
+  }
+  
+  println "== User Count =="  
+  showResults("user count", "select count(*) from XWikiDocument as doc, BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers'")
+  println "== Wiki Count =="
+  showResults("wiki count", "select count(*) from XWikiDocument as doc, BaseObject as obj where doc.fullName=obj.name and obj.className='XWiki.XWikiServerClass'")
+  println "== Activity Stream activity =="  
+  showResults("Year, Entries, Disctinct users", "select year(date), count(*), count(distinct user) from ActivityEventImpl group by year(date)")
+  println "== Stats activity =="  
+  showResults("Year, Entries, Disctinct users, Views, Saves, Downloads", "select year(startDate), count(*), count(distinct name), sum(pageViews), sum(pageSaves), sum(downloads) from VisitStats group by year(startDate)")
+  println "== Pages &amp; Comments activity =="  
+  
+  for (wiki in getWikiList()) {
+    println "=== ${wiki} ==="
+    showResults("Nb Pages", "select count(*) from XWikiDocument as doc", wiki)
+    showResults("Nb Comments", "select count(*) from BaseObject as obj where obj.className='XWiki.XWikiComments'", wiki)
+    showResults("High Comments", "select count(*) from XWikiDocument as doc where doc.fullName in (select obj.name from BaseObject as obj where obj.className='XWiki.XWikiComments' group by obj.name having count(*)&gt;50)", wiki)
+    showResults("Page Name, Nb Comments", "select obj.name, count(*) from BaseObject as obj where obj.className='XWiki.XWikiComments' group by obj.name having count(*)&gt;50 order by 2 desc", wiki)
+  }
+  
+{{/groovy}}</content>
+</xwikidoc>
