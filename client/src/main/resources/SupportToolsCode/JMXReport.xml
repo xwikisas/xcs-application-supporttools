@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>SupportToolsCode</web>
+  <name>JMXReport</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>WebHome</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1420066800000</creationDate>
+  <date>1420066800000</date>
+  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <version>1.1</version>
+  <title>JMX JVM Information</title>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{groovy}}
+import java.lang.management.*
+
+  println "{{{"
+def os = ManagementFactory.operatingSystemMXBean
+println """OPERATING SYSTEM:
+\tarchitecture = $os.arch
+\tname = $os.name
+\tversion = $os.version
+\tprocessors = $os.availableProcessors
+"""
+
+def rt = ManagementFactory.runtimeMXBean
+println """RUNTIME:
+\tname = $rt.name
+\tspec name = $rt.specName
+\tvendor = $rt.specVendor
+\tspec version = $rt.specVersion
+\tmanagement spec version = $rt.managementSpecVersion
+"""
+
+def cl = ManagementFactory.classLoadingMXBean
+println """CLASS LOADING SYSTEM:
+\tisVerbose = ${cl.isVerbose()}
+\tloadedClassCount = $cl.loadedClassCount
+\ttotalLoadedClassCount = $cl.totalLoadedClassCount
+\tunloadedClassCount = $cl.unloadedClassCount
+"""
+
+def comp = ManagementFactory.compilationMXBean
+println """COMPILATION:
+\ttotalCompilationTime = $comp.totalCompilationTime
+"""
+
+def mem = ManagementFactory.memoryMXBean
+def heapUsage = mem.heapMemoryUsage
+def nonHeapUsage = mem.nonHeapMemoryUsage
+println """MEMORY:
+HEAP STORAGE:
+\tcommitted = $heapUsage.committed
+\tinit = $heapUsage.init
+\tmax = $heapUsage.max
+\tused = $heapUsage.used
+NON-HEAP STORAGE:
+\tcommitted = $nonHeapUsage.committed
+\tinit = $nonHeapUsage.init
+\tmax = $nonHeapUsage.max
+\tused = $nonHeapUsage.used
+"""
+
+ManagementFactory.memoryPoolMXBeans.each{ mp -&gt;
+    println "\tname: " + mp.name
+    String[] mmnames = mp.memoryManagerNames
+    mmnames.each{ mmname -&gt;
+        println "\t\tManager Name: $mmname"
+    }
+    println "\t\tmtype = $mp.type"
+    println "\t\tUsage threshold supported = " + mp.isUsageThresholdSupported()
+}
+println()
+
+def td = ManagementFactory.threadMXBean
+println "THREADS:"
+td.allThreadIds.each { tid -&gt;
+    println "\tThread name = ${td.getThreadInfo(tid).threadName}"
+}
+println()
+
+println "GARBAGE COLLECTION:"
+ManagementFactory.garbageCollectorMXBeans.each { gc -&gt;
+    println "\tname = $gc.name"
+    println "\t\tcollection count = $gc.collectionCount"
+    println "\t\tcollection time = $gc.collectionTime"
+    String[] mpoolNames = gc.memoryPoolNames
+    mpoolNames.each { mpoolName -&gt;
+        println "\t\tmpool name = $mpoolName"
+    }
+}
+  
+  println "}}}"
+{{/groovy}}</content>
+</xwikidoc>

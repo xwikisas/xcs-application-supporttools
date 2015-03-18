@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>SupportToolsCode</web>
+  <name>JavaMelodyReport</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>WebHome</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1420066800000</creationDate>
+  <date>1420066800000</date>
+  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <version>1.1</version>
+  <title>Java Melody Report</title>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{groovy}}    
+  import net.bull.javamelody.*;
+  import org.apache.commons.codec.binary.Base64;
+  
+  def engineContext = xcontext.getContext().getEngineContext()
+  def scontext = engineContext.getServletContext();
+  def collector = scontext.getAttribute("javamelody.filterContext").getCollector()
+ 
+  if (collector==null) {
+    println "Java Melody is not installed"
+  } else {
+  
+    
+  def jrobins = collector.getCounterJRobins();  
+    for (jrobin in jrobins) {
+      println "=== ${jrobin.name} ${jrobin.getLastValue()} ==="
+      
+      def data64 = Base64.encodeBase64String(jrobin.graph(Range.createPeriodRange(Period.JOUR), 400, 200))
+      print "[[image:data:image/png;base64,${data64}]]"
+      data64 = Base64.encodeBase64String(jrobin.graph(Range.createPeriodRange(Period.SEMAINE), 400, 200))
+      print "[[image:data:image/png;base64,${data64}]]"
+      println ""
+    }
+    
+  def counters = collector.dayCountersByCounter
+    
+  for (counter in counters) {
+    def c = counter.value 
+    def reqs = c.getOrderedRequests()
+    if (reqs.size()&gt;0) {
+    println "=== ${c.name} from ${c.startDate}: **${c.getRequestsCount()} requests ${c.getErrorsCount()} errors** ==="
+    println "|= Id |= Duration |= Hits"
+    for (i in 0..19) {
+      if (i&lt;reqs.size()) {
+         def req = reqs.getAt(i);
+        println "| ${req.name} | **${req.getDurationsSum()}ms** | **${req.getHits()} hits**"
+      }
+      
+    }
+    }
+  }
+  }
+
+ 
+{{/groovy}}</content>
+</xwikidoc>

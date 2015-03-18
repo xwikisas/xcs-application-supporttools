@@ -65,11 +65,24 @@ supporttools.sendreport.confirm=Confirmez l'envoi du rapport de configuration
 supporttools.sendreport.info=Cet outil permet d'envoyer un rapport sur votre configuration au Support d'XWiki SAS. Toutes les informations seront gardées strictement confidentielles.
 supporttools.sendreport.success=Le rapport à été envoyé à XWiki SAS.
 supporttools.sendreport.fail=Le rapport n'a pas pu être envoyé à XWiki SAS. Vous pouvez le télécharger ci-dessous et l'envoyer par email à "support@xwiki.com".
-supporttools.sendreport.download=Télépcharger le rapport
+supporttools.sendreport.download=Télécharger le rapport
+
+supporttools.sendheapdump.button=Envoyer un dump mémoire
+supporttools.sendheapdump.title=Envoyer le dump mémoire
+supporttools.sendheapdump.confirm=Confirmez l'envoi du dump mémoire
+supporttools.sendheapdump.info={{warning}}Attention ! Cette fonctionnalité peut ralentir votre machine. Il faut l'utiliser en dehors des heures ouvrables. Il est aussi possible que le fichier généré soit trop gros pour être envoyé par Internet. En ce cas il faudra le transférer par d'autres moyens.{{/warning}}\n\nCet outil permet d'envoyer un "dump mémoire" complet de votre instance XWiki à XWiki SAS.
+supporttools.sendheapdump.success=Le dump mémoire à été envoyé à XWiki SAS.
+supporttools.sendheapdump.fail=Le dump mémoire n'a pas pu être envoyé à XWiki SAS. Il est possible que celui-ci soit trop gros. Vous pouvez le télécharger ci-dessous et l'envoyer par email à "support@xwiki.com".
+supporttools.sendheapdump.download=Télécharger le dump mémoire
 
 
 supporttools.downloadreport.nojob=Voici les rapports disponibles:
 supporttools.downloadreport.downloading=Téléchargement du rapport
 supporttools.downloadreport.reportfrom=Rapport du {0}
-supporttools.downloadreport.title=Téléchargement des rapports</content>
+supporttools.downloadreport.title=Téléchargement des rapports
+
+supporttools.downloadheapdump.nojob=Voici les dumps mémoire disponibles:
+supporttools.downloadheapdump.downloading=Téléchargement le dump mémoire
+supporttools.downloadheapdump.reportfrom=Dump mémoire du {0}
+supporttools.downloadheapdump.title=Téléchargement des dumps mémoire</content>
 </xwikidoc>

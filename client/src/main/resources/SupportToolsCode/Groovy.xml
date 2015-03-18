@@ -148,12 +148,17 @@ public class SupportTools {
     jobStarted = false;   
   } 
 
+  /* Clear all the storage directory */
   public clearStorageDirectory() {
-
+	FileUtils.deleteDirectory(getReportsDirectory());
   }
 
   public getReportsDirectory() {
    return new File(environment.permanentDirectory, "/supporttools/");
+  }
+
+  public getHeapDumpsDirectory() {
+   return new File(environment.permanentDirectory, "/supporttools/heapdumps/");
   }
 
   public getStorageDirectory() {
@@ -168,9 +173,8 @@ public class SupportTools {
     return new File(getStorageDirectory(id), "report${id}.zip");
   }
 
-  public downloadFile(id) {
-    response.setContentType("application/octetstream");
-
+  public getHeapDumpFile(id) {
+    return new File(getHeapDumpsDirectory(), "heapdump${id}.zip");
   }
 
   /*
@@ -211,9 +215,50 @@ xwikiVersion: ${xwiki.getVersion()}
      zipout.close();
   }
 
-  public sendFile() {
+ /*
+    Create a zip file out of all the files in the directory
+  */
+  public makeHeapDumpZip(file) {
+   def wikiURL = xwiki.getDocument("Main.WebHome").getExternalURL();
+
+   def strinfo = """heapdump/${REPORTVERSION}
+wiki: ${wikiURL}
+client: ${clientName}
+id: ${jobId}
+xwikiVersion: ${xwiki.getVersion()}
+"""
+
+     def targetFile = new File(getHeapDumpsDirectory(), "heapdump${jobId}.zip");
+     // force parent dir creation
+     FileUtils.forceMkdir(getHeapDumpsDirectory());
+     def dest = new FileOutputStream(targetFile);
+     def zipout = new  ZipOutputStream(new BufferedOutputStream(dest)); 
+     def data = new byte[BUFFER];
+
+     debug("Adding heap file");
+     def fi = new FileInputStream(file);
+     def origin = new BufferedInputStream(fi, BUFFER);
+     ZipEntry entry = new ZipEntry(file.getName());
+     zipout.putNextEntry(entry);
+     int count;
+     while((count = origin.read(data, 0, 
+              BUFFER)) != -1) {
+               zipout.write(data, 0, count);
+        }
+     origin.close();
+     entry = new ZipEntry("info.txt");
+     zipout.write(strinfo.getBytes());
+     zipout.close();
+     return targetFile;
+  }
+
+public sendFile() {
+  def targetFile = new File(getStorageDirectory(), "report${jobId}.zip");
+  return sendFile(targetFile);
+}
+
+  public sendFile(targetFile) {
 try {
-   def targetFile = new File(getStorageDirectory(), "report${jobId}.zip");
    def httpClient = getHttpClient()
 
    def post = new HttpPost(serverURL + "/xwiki/bin/view/Reports/NewReport");
@@ -265,6 +310,12 @@ try {
  addXWikiPage("Admin.CheckDBEncoding")
  addXWikiPage("Admin.CheckIndexes")
  addXWikiPage("SupportToolsCode.ActivityReport")
+ addXWikiPage("SupportToolsCode.JavaMelodyReport")
+ addXWikiPage("SupportToolsCode.ClusterConfig")
+ addXWikiPage("SupportToolsCode.JMXCacheStatistics")
+ addXWikiPage("SupportToolsCode.JMXReport")
+ addXWikiPage("SupportToolsCode.ThreadDump")
+ addXWikiPage("SupportToolsCode.SolrReport")
  addWEBINFListing()
  addServerCommand("xwiki-workdir", "ls -lR /usr/local/xwiki-workdir/")
  addServerCommand("tomcat-server.xml", "cat /usr/local/tomcat/conf/server.xml")
@@ -285,22 +336,61 @@ try {
 }
 }
 
+public boolean sendHeapDump(file) {
+try {
+ startJob()
+ sendFile(makeHeapDumpZip(file));
+} finally {
+ endJob();
+}
+}
+
   public downloadReport(id) {
    def targetFile = getReportFile(id)
    xcontext.response.setContentType("application/octet-stream");
    xcontext.response.setHeader("Content-Disposition", "attachment; filename=report" + id + ".zip")
-   xcontext.setFinished(true);
-   def fos = response.getOutputStream();
+   def fos = xcontext.response.getOutputStream();
    FileUtils.copyFile(targetFile, fos)
+   xcontext.setFinished(true);
   }
 
   public listReports() {
    def str = ""
    def repDir = getReportsDirectory();
+   // force parent dir creation
+   FileUtils.forceMkdir(repDir);
+     
    for (file in repDir.listFiles()) {
     try {
      def date = new Date(Long.parseLong(file.name))
      def text = services.localization.render("supporttools.downloadreport.reportfrom", [date])
+     str += """* [[${text}&gt;&gt;||queryString="id=${file.name}"]]\n""";
+    } catch (e) {
+    }
+   }
+   return str;
+  }
+
+  public downloadHeapDump(filename) {
+   def targetFile = new File(getHeapDumpsDirectory(), filename)
+   xcontext.response.setContentType("application/octet-stream");
+   xcontext.response.setHeader("Content-Disposition", "attachment; filename=" + filename)
+   def fos = xcontext.response.getOutputStream();
+   FileUtils.copyFile(targetFile, fos)
+   xcontext.setFinished(true);
+  }
+
+  public listHeapDumps() {
+   def str = ""
+   def repDir = getHeapDumpsDirectory();
+   // force parent dir creation
+   FileUtils.forceMkdir(repDir);
+   for (file in repDir.listFiles()) {
+    try {
+     def filename = file.name;
+     def sdate = filename.replaceAll("heapdump", "").replaceAll(".zip", "")
+     def date = new Date(Long.parseLong(sdate))
+     def text = services.localization.render("supporttools.downloadheapdump.reportfrom", [date])
      str += """* [[${text}&gt;&gt;||queryString="id=${file.name}"]]\n""";
     } catch (e) {
     }

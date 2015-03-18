@@ -102,9 +102,22 @@ supporttools.sendreport.success=The report has been sent to XWiki SAS successful
 supporttools.sendreport.fail=The report could not be sent to XWiki SAS. You can download the report below and send it by email to "support@xwiki.com".
 supporttools.sendreport.download=Download report
 
+supporttools.sendheapdump.button=Send a memory heap dump
+supporttools.sendheapdump.title=Send the memory heap dump
+supporttools.sendheapdump.confirm=Confirm sending the memory heap dump (this can slow down your server)
+supporttools.sendheapdump.info={{warning}}Warning ! This tool can slow down your server. It should only be used off-hours. It is also possible that the file generated is too big to be sent using the Internet. In this case it should be transfered using other means{{/warning}}\n\nThis tool allows to send a complete  "memory heap dump" of your XWiki instance to XWiki SAS.
+supporttools.sendheapdump.success=The memory heap dump has been sent to XWiki SAS.
+supporttools.sendheapdump.fail=The memory heap dump could not be sent to XWiki SAS. It is possible that the file is too big. You can download it below.".
+supporttools.sendheapdump.download=Download the memory heap dump
+
 
 supporttools.downloadreport.nojob=No report Id has been indicated. Here are the following reports available:
 supporttools.downloadreport.downloading=Downloading report
 supporttools.downloadreport.reportfrom=Report from date {0}
-supporttools.downloadreport.title=Download Reports</content>
+supporttools.downloadreport.title=Download Reports
+
+supporttools.downloadheapdump.nojob=No heap dump has been indicated. Here are the following heap dump available:
+supporttools.downloadheapdump.downloading=Downloading heap dump
+supporttools.downloadheapdump.reportfrom=Heapdump from date {0}
+supporttools.downloadheapdump.title=Download Heap Dumps</content>
 </xwikidoc>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xwikidoc>
+  <web>SupportToolsCode</web>
+  <name>SendHeapDump</name>
+  <language/>
+  <defaultLanguage/>
+  <translation>0</translation>
+  <parent>WebHome</parent>
+  <creator>xwiki:XWiki.Admin</creator>
+  <author>xwiki:XWiki.Admin</author>
+  <customClass/>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <creationDate>1420066800000</creationDate>
+  <date>1420066800000</date>
+  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <version>1.1</version>
+  <title>Send Heap Dump</title>
+  <defaultTemplate/>
+  <validationScript/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>false</hidden>
+  <content>{{groovy}}  
+if (request.confirm) {
+def st = xwiki.parseGroovyFromPage("SupportToolsCode.Groovy")
+st.setXWiki(xwiki, xcontext, services)
+  
+def action = net.bull.javamelody.Action.HEAP_DUMP
+  if (st.sendHeapDump(action.heapDump())) {
+   println services.localization.render("supporttools.sendheapdump.success") 
+} else {
+   println services.localization.render("supporttools.sendheapdump.fail")
+   println """== ${services.localization.render("supporttools.debug")} ==
+  
+${services.localization.render("supporttools.debuginfo")}
+
+${st.debugMsg}
+
+"""
+}   
+
+    println """
+
+{{html clean=false}}
+&lt;a href="DownloadReport?id=${st.jobId}&amp;type=heapdump" class="button"&gt;${services.localization.render("supporttools.sendheapdump.download")}&lt;/a&gt;
+{{/html}}"""
+} else {
+ println services.localization.render("supporttools.sendheapdump.info")
+
+  println """
+
+{{html clean=false}}
+&lt;a href="?confirm=1" class="button"&gt;${services.localization.render("supporttools.sendheapdump.confirm")}&lt;/a&gt;
+{{/html}}"""
+}
+  
+{{/groovy}}</content>
+</xwikidoc>
