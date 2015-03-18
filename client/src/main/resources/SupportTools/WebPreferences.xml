@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <xwikidoc>
-  <web>SupportToolsCode</web>
+  <web>SupportTools</web>
   <name>WebPreferences</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
-  <parent>SupportToolsCode.WebHome</parent>
+  <parent>SupportTools.WebHome</parent>
   <creator>xwiki:XWiki.Admin</creator>
   <author>xwiki:XWiki.Admin</author>
   <customClass/>
@@ -88,10 +88,10 @@
         <classType>com.xpn.xwiki.objects.classes.UsersClass</classType>
       </users>
     </class>
-    <name>SupportToolsCode.WebPreferences</name>
+    <name>SupportTools.WebPreferences</name>
     <number>0</number>
     <className>XWiki.XWikiGlobalRights</className>
-    <guid>e72b5cdf-fc34-4a78-854a-92088ba0b116</guid>
+    <guid>5504d432-71cf-4ce9-9560-5e3bbd49fa76</guid>
     <property>
       <allow>1</allow>
     </property>
@@ -99,7 +99,7 @@
       <groups>XWiki.XWikiAdminGroup</groups>
     </property>
     <property>
-      <levels>view,comment,edit</levels>
+      <levels>view,edit,comment</levels>
     </property>
   </object>
   <object>
@@ -1279,10 +1279,10 @@
         <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
       </xwiki.title.mandatory>
     </class>
-    <name>SupportToolsCode.WebPreferences</name>
+    <name>SupportTools.WebPreferences</name>
     <number>0</number>
     <className>XWiki.XWikiPreferences</className>
-    <guid>12f5a767-1f04-41c2-afb3-54306ba30f2d</guid>
+    <guid>3579366d-2720-48b5-9213-f5fe43457af6</guid>
   </object>
   <content/>
 </xwikidoc>
