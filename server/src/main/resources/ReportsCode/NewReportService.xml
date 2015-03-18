@@ -270,7 +270,7 @@ if (request.id) {
  def bytes = fileupload.getFileItemData("file")
  // create a document working around the rights of the space
  def reportDoc = new com.xpn.xwiki.api.Document(xwiki.getXWiki().getDocument("Reports.${request.client}${request.id}", xcontext.getContext()), xcontext.getContext())
-
+ reportDoc.setParent("Reports.WebHome")
  if (reportDoc.getObject("ReportsCode.ReportsClass"))
   reportDoc.use("ReportsCode.ReportsClass")
  else  
