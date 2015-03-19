@@ -308,7 +308,6 @@ try {
  addXWikiPage("Admin.ShowRights")
  addXWikiPage("Admin.UsedSpace")
  addXWikiPage("Admin.CheckDBEncoding")
- addXWikiPage("Admin.CheckIndexes")
  addXWikiPage("SupportToolsCode.ActivityReport")
  addXWikiPage("SupportToolsCode.JavaMelodyReport")
  addXWikiPage("SupportToolsCode.ClusterConfig")
@@ -329,6 +328,8 @@ try {
  addServerCommand("xinit", "/etc/init.d/xwiki.sh show-report")
  addServerCommand("apache2", "cat /etc/apache2/*.conf")
  addServerCommand("apache2sites", "cat /etc/apache2/sites-enabled/*")
+ // this one should be last because it seems to play with the database connection making context switches fail
+ addXWikiPage("Admin.CheckIndexes")
  makeZip();
  return sendFile();
 } finally {
@@ -405,8 +406,13 @@ try {
   }
 
   public addXWikiPage(name) {    
-     def renderedContent = xwiki.getDocument(name).getRenderedContent();
-     addString(name + ".html", renderedContent);   
+     def db = xcontext.getContext().getDatabase();
+     try {
+      def renderedContent = xwiki.getDocument(name).getRenderedContent();
+      addString(name + ".html", renderedContent);   
+     } finally {
+      xcontext.getContext().setDatabase(db);
+     }
   }
 
   public addString(filename, str) {
