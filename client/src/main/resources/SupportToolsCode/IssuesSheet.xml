@@ -19,24 +19,21 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 -->
 
-<xwikidoc>
+<xwikidoc version="1.1">
   <web>SupportToolsCode</web>
   <name>IssuesSheet</name>
   <language/>
   <defaultLanguage/>
   <translation>0</translation>
-  <parent>SupportTools.WebHome</parent>
   <creator>xwiki:XWiki.Admin</creator>
-  <author>xwiki:XWiki.Admin</author>
-  <customClass/>
-  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <creationDate>1420066800000</creationDate>
-  <date>1420066800000</date>
-  <contentUpdateDate>1420066800000</contentUpdateDate>
+  <parent>SupportTools.WebHome</parent>
+  <author>xwiki:XWiki.Admin</author>
+  <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
+  <date>1447257317000</date>
+  <contentUpdateDate>1447254944000</contentUpdateDate>
   <version>1.1</version>
   <title>$services.localization.render("supporttools.issues.list")</title>
-  <defaultTemplate/>
-  <validationScript/>
   <comment/>
   <minorEdit>false</minorEdit>
   <syntaxId>xwiki/2.1</syntaxId>
@@ -45,7 +42,7 @@
 
  {{html clean=false}}
  &lt;a href="$xwiki.getURL("SupportTools.NewIssue")" class="button"&gt;$services.localization.render("supporttools.newissue.button")&lt;/a&gt;
- &lt;a href="$xwiki.getURL("SupportTools.SendReport")" class="button"&gt;$services.localization.render("supporttools.sendreport.button")&lt;/a&gt;
+ &lt;a id="send-report" href="$xwiki.getURL("SupportTools.SendReport")" class="button"&gt;$services.localization.render("supporttools.sendreport.button")&lt;/a&gt;
  {{/html}}
 
 
@@ -60,7 +57,7 @@
 $services.localization.render("supporttools.debuginfo")
 
 $st.debugMsg
- #elseif($issues.issues.size()==0)
+ #elseif($issues &amp;&amp; $issues.issues.size()==0)
  $services.localization.render("supporttools.issues.noissues")
  #else
  |= $services.localization.render("supporttools.issue.id")|= $services.localization.render("supporttools.issue.summary") |= $services.localization.render("supporttools.issue.type") |= $services.localization.render("supporttools.issue.status") |= $services.localization.render("supporttools.issue.creationDate") |= $services.localization.render("supporttools.issue.updateDate")
@@ -69,4 +66,109 @@ $st.debugMsg
  #end
  #end
 {{/velocity}}</content>
+  <object>
+    <name>SupportToolsCode.IssuesSheet</name>
+    <number>0</number>
+    <className>XWiki.JavaScriptExtension</className>
+    <guid>c5418bbc-b275-4d7f-9996-f907069bc030</guid>
+    <class>
+      <name>XWiki.JavaScriptExtension</name>
+      <customClass/>
+      <customMapping/>
+      <defaultViewSheet/>
+      <defaultEditSheet/>
+      <defaultWeb/>
+      <nameField/>
+      <validationScript/>
+      <cache>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>cache</name>
+        <number>5</number>
+        <prettyName>Caching policy</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators> ,|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>long|short|default|forbid</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </cache>
+      <code>
+        <disabled>0</disabled>
+        <name>code</name>
+        <number>2</number>
+        <prettyName>Code</prettyName>
+        <rows>20</rows>
+        <size>50</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.TextAreaClass</classType>
+      </code>
+      <name>
+        <disabled>0</disabled>
+        <name>name</name>
+        <number>1</number>
+        <prettyName>Name</prettyName>
+        <size>30</size>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.StringClass</classType>
+      </name>
+      <parse>
+        <disabled>0</disabled>
+        <displayFormType>select</displayFormType>
+        <displayType>yesno</displayType>
+        <name>parse</name>
+        <number>4</number>
+        <prettyName>Parse content</prettyName>
+        <unmodifiable>0</unmodifiable>
+        <classType>com.xpn.xwiki.objects.classes.BooleanClass</classType>
+      </parse>
+      <use>
+        <cache>0</cache>
+        <disabled>0</disabled>
+        <displayType>select</displayType>
+        <multiSelect>0</multiSelect>
+        <name>use</name>
+        <number>3</number>
+        <prettyName>Use this extension</prettyName>
+        <relationalStorage>0</relationalStorage>
+        <separator> </separator>
+        <separators> ,|</separators>
+        <size>1</size>
+        <unmodifiable>0</unmodifiable>
+        <values>onDemand=On demand|always=Always</values>
+        <classType>com.xpn.xwiki.objects.classes.StaticListClass</classType>
+      </use>
+    </class>
+    <property>
+      <cache>long</cache>
+    </property>
+    <property>
+      <code>require(['jquery'], function($) {
+  console.log($("#send-report"));
+  $("#send-report").on('click', function(event, data) {
+    event.preventDefault();
+    // call SupportTools.SendReport with confirm=1
+    $.ajax({
+      url: "$xwiki.getDocument('SupportTools.SendReport').getExternalURL('view', 'confirm=1')",
+      method: "POST",
+      beforeSend : function() {
+        new XWiki.widgets.Notification('The reports have started sending', 'info');
+      }
+    });
+  });
+});</code>
+    </property>
+    <property>
+      <name/>
+    </property>
+    <property>
+      <parse>1</parse>
+    </property>
+    <property>
+      <use>always</use>
+    </property>
+  </object>
 </xwikidoc>
