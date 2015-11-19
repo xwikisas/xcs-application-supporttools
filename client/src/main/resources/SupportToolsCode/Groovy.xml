@@ -466,7 +466,7 @@ try {
 
   public getTickets() {
    try {
-    def url = "${serverURL}/xwiki/bin/view/SupportCode/IssueListSheetJson?xpage=plain&amp;outputSyntax=plain&amp;status=all&amp;basicauth=1"
+    def url = "${serverURL}/xwiki/bin/view/SupportToolsCode/IssueListSheetJson?xpage=plain&amp;outputSyntax=plain&amp;status=all&amp;basicauth=1"
     def json = xwiki.getURLContent(url, clientUsername, clientPassword)
     def jsonSlurper = new JsonSlurper()
     return jsonSlurper.parseText(json)
