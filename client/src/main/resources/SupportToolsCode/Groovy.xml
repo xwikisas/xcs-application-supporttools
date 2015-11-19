@@ -496,7 +496,7 @@ if (sendReport()) {
 try {
    def httpClient = getHttpClient()
 
-   def post = new HttpPost("${serverURL}/xwiki/bin/view/SupportCode/NewTicketFormJson?basicauth=1");
+   def post = new HttpPost("${serverURL}/xwiki/bin/view/SupportToolsCode/NewTicketFormJson?basicauth=1");
    
    def builder = MultipartEntityBuilder.create();
    builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
