@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xwikidoc version="1.1">
+  <web>SupportToolsCode</web>
+  <name>IssuesSheet-livetableJSON</name>
+  <language/>
+  <defaultLanguage>fr</defaultLanguage>
+  <translation>0</translation>
+  <creator>XWiki.XWikiTeam</creator>
+  <creationDate>1448373279000</creationDate>
+  <author>XWiki.XWikiTeam</author>
+  <contentAuthor>XWiki.XWikiTeam</contentAuthor>
+  <date>1448396012000</date>
+  <contentUpdateDate>1448396012000</contentUpdateDate>
+  <version>2.1</version>
+  <title/>
+  <comment/>
+  <minorEdit>false</minorEdit>
+  <syntaxId>xwiki/2.1</syntaxId>
+  <hidden>true</hidden>
+  <content>{{velocity}}
+#set($offset = $numbertool.toNumber($request.offset))
+#set($limit = $numbertool.toNumber($request.limit))
+
+#if(!$offset)
+#set($offset = 1)
+#end
+#set($offset = $offset - 1)
+
+#set($st = $xwiki.parseGroovyFromPage("SupportToolsCode.Groovy"))
+#set($ok = $st.setXWiki($xwiki, $context, $services))
+#set($issues = $st.getTickets())
+#set($rows = [])
+#set($totalRows = $issues.issues.size())
+#foreach($issue in $issues.issues)
+  #set($discard = $rows.add({
+  'doc_viewable'   : true,
+  'id'       : "&lt;a href='${issue.url}'>${issue.key}&lt;/a>",
+  'summary'  : "$!issue.summary",
+  'status'   : "$!issue.statusPretty",
+  'type'     : "$!issue.typePretty",
+  'creationDate'  : "$!issue.createdPretty",
+  'updateDate'  : "$!issue.updatedPretty"
+  }))
+#end
+$jsontool.serialize({
+'offset' : $request.offset,
+'reqNo' : $request.reqNo,
+'totalrows' : $totalRows,
+'returnedrows' : $rows.size(),
+'rows' : $rows
+})
+{{/velocity}}
+  </content>
+</xwikidoc>

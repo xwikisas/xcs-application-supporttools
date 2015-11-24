@@ -60,11 +60,24 @@ $st.debugMsg
  #elseif($issues &amp;&amp; $issues.issues.size()==0)
  $services.localization.render("supporttools.issues.noissues")
  #else
- |= $services.localization.render("supporttools.issue.id")|= $services.localization.render("supporttools.issue.summary") |= $services.localization.render("supporttools.issue.type") |= $services.localization.render("supporttools.issue.status") |= $services.localization.render("supporttools.issue.creationDate") |= $services.localization.render("supporttools.issue.updateDate")
- #foreach($issue in $issues.issues)
- | [[${issue.key}&gt;&gt;${issue.url}]] | $issue.summary | ${issue.statusPretty} | ${issue.typePretty} | ${issue.createdPretty} | ${issue.updatedPretty} 
- #end
- #end
+    #set($issuesLTColumns = ["id", "summary", "type", "status","creationDate","updateDate"])
+    #set($issuesLTColumnProperties = {
+    "id" : { "type" : "text", "html" : "true", "filterable":false},
+    "summary" : { "type" : "text", "filterable":false},
+    "type" : {"type":"list","size":10,"html":false,"filterable":false},
+    "status" : {"type":"list", "html" : "true", "filterable":false},
+    "creationDate" : { "type" : "datetime", "filterable": false},
+    "updateDate" : { "type" : "datetime", "filterable": false}
+    })
+    #set($issuesLTOptions = {
+    'url' : "$xwiki.getURL('SupportToolsCode.IssuesSheet-livetableJSON', 'get', 'outputSyntax=plain')",
+    'translationPrefix' : 'supporttools.issue.',
+    'rowCount': 10,
+    'selectedColumn': 'updateDate',
+    'defaultOrder': 'asc'
+    })
+    #livetable("issuesLT" $issuesLTColumns $issuesLTColumnProperties $issuesLTOptions)
+    #end
 {{/velocity}}</content>
   <object>
     <name>SupportToolsCode.IssuesSheet</name>
