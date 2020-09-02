@@ -32,8 +32,8 @@
   <customClass/>
   <contentAuthor>xwiki:XWiki.Admin</contentAuthor>
   <creationDate>1420066800000</creationDate>
-  <date>1599039429000</date>
-  <contentUpdateDate>1599039429000</contentUpdateDate>
+  <date>1599053168000</date>
+  <contentUpdateDate>1599053168000</contentUpdateDate>
   <version>1.1</version>
   <title>$services.localization.render("supporttools.sendreport.title")</title>
   <defaultTemplate/>
@@ -88,7 +88,7 @@ ${st.debugMsg}
   println """
 
 {{html clean=false}}
-&lt;a href="?confirm=1" class="button"&gt;${services.localization.render("supporttools.sendreport.confirm")}&lt;/a&gt;
+&lt;a id='send-report' href="?confirm=1" class="button"&gt;${services.localization.render("supporttools.sendreport.confirm")}&lt;/a&gt;
 &lt;a href="?download=1" class="button"&gt;${services.localization.render("supporttools.sendreport.download")}&lt;/a&gt;
 {{/html}}"""
 }
